@@ -1,0 +1,105 @@
+MODULE TODO: REPEATED DATA-BROKER CONDUCT AFTER NOTICE
+
+Purpose
+-------
+Help a user keep a factual record when a commercial data broker appears to
+continue activity after the user appropriately asked it to stop or remove
+information. This is an independent feature. Do not connect it to other
+modules until the project owner asks to discuss orchestration.
+
+Agent foundation
+----------------
+This module has its own agent configuration in `agent.py` and imports the
+shared `react_framework` execution engine. It binds only the case-file and
+local specialist tools it needs. Event interpretation and legal/privacy policy
+remain specific to this module. The research specialist currently prepares
+plans only because no public-search provider is configured.
+
+The shared framework is limited to local Ollama communication and bounded
+tool execution. This module must decide what its own tools may do and how
+their results are interpreted. It must not call another feature module.
+
+Evidence tools are restricted to an app-managed case workspace:
+- Originals are explicitly imported as copies under `originals/`.
+- Agent tools can read and search originals but cannot modify, rename, or
+  delete them.
+- Copies and generated notes are create-new files under `derived/`; existing
+  files are never overwritten.
+- UTF-8 text search returns exact quotations with path, line number, and
+  SHA-256 citation. It reports unsupported, oversized, or invalid-text files
+  that it skipped. PDF extraction and scanned-image OCR are not configured.
+- Agent actions are shown live and recorded as content-free metadata in the
+  case's local `activity.jsonl`.
+
+The research specialist receives only a non-identifying query, not case files.
+The legal issue-spotting specialist may receive case context locally. It has
+no verified legal source library and must not claim legal research.
+
+Plain-English algorithm
+-----------------------
+1. Let the user create a record of a notice sent to a broker. Capture the
+   notice or a copy, the named recipient, the date, the delivery method, and
+   any available proof that it was sent or received.
+2. Keep the user's original notice and delivery evidence unchanged as
+   evidence. Record any explanatory notes separately.
+3. Let the user add a separate entry for each later observation that may show
+   continued or repeated broker activity. Capture when and how it was
+   observed and attach the relevant screenshot, letter, report, or other
+   evidence.
+4. Ask the user which broker and prior notice the observation may relate to.
+   Record that link as user-reported until supported or reviewed; do not
+   silently decide that two records refer to the same person or data.
+5. Distinguish clearly between a notice the user says they sent, evidence of
+   delivery, a broker response, a user observation, and an agent inference.
+6. Show events in chronological order. Preserve the date as recorded and mark
+   missing, conflicting, estimated, or uncertain dates for the user to review.
+7. Identify missing supporting material or inconsistencies without changing
+   the original records. Let the user correct or add context while preserving
+   a clear distinction between the original evidence and later notes.
+8. If the user asks for research, use public sources and non-identifying
+   queries only. Never include the user's personal identifiers or case details
+   in a public query, and do not break laws or bypass access restrictions.
+9. If the broker's location can be established, allow research into public
+   information about the broker and laws relevant to its jurisdiction.
+   Distinguish that research from laws that may apply to the user.
+10. Present the sequence of notice, delivery, response, and later observation
+    as a factual timeline with links to its evidence. Do not label conduct
+    unlawful, intentional, or proven merely because it appears repeated.
+11. Let the local agent explain possible administrative recourse and prepare
+    questions or a summary for professional attorney review. Show sources,
+    reasoning, and uncertainty; keep that analysis separate from evidence.
+12. If the user later chooses to prepare an attorney-review summary, show the
+    user what evidence and analysis will be included before producing it.
+    This feature does not send notices, complaints, or other communications.
+
+Evidence and privacy rules
+--------------------------
+- Keep records locally during development; do not place them in a browser or
+  cloud service.
+- Preserve originals and keep agent summaries and researched material as
+  separate, clearly labeled records.
+- Public research must use non-identifying queries and publicly accessible
+  information only.
+- The local Ollama model is the intended model runtime.
+- Production encryption, retention, backup, export, and deletion controls
+  remain to be clarified.
+
+Questions to resolve before implementation
+------------------------------------------
+- What kinds of notice should the user be able to record, and what makes a
+  notice "appropriately" sent for the user's own tracking?
+- How should the record represent partial replies, disputed delivery, a
+  broker asking for more verification, or an observation that may refer to a
+  different source?
+- Which evidence is enough to label a date, delivery, or later observation
+  confirmed, versus reported or uncertain?
+- How should users correct a timeline while keeping the earlier evidence and
+  history understandable?
+- What should an attorney-review summary contain?
+
+Not included yet
+----------------
+- No implementation of a tracker, case database, notifications, or
+  automated follow-up is implied by this TODO.
+- Do not connect this module to evidence analysis or broker compliance until
+  module orchestration is explicitly discussed.

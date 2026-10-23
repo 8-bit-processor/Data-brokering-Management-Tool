@@ -1,0 +1,26 @@
+[
+  {
+    "broker_id": "whitepages",
+    "broker": "Whitepages",
+    "regions": [
+      "United States"
+    ],
+    "opt_out_method": "Listing-specific online removal form",
+    "opt_out_url": "https://www.whitepages.com/suppression-requests",
+    "instructions": "Find your listing on Whitepages yourself and confirm it is yours. Copy its profile URL, then open the official opt-out page and submit that URL. Follow the site's confirmation steps; Whitepages' published instructions describe telephone verification. This removes information from Whitepages services only, not from original sources or other sites.",
+    "source_url": "https://support.whitepages.com/hc/en-us/articles/115010106908-Edit-or-Remove-a-personal-listing",
+    "verified_at": "2026-10-22"
+  },
+  {
+    "broker_id": "spokeo",
+    "broker": "Spokeo",
+    "regions": [
+      "United States"
+    ],
+    "opt_out_method": "Listing-specific online opt-out form",
+    "opt_out_url": "https://www.spokeo.com/optout",
+    "instructions": "Find the listing on Spokeo yourself and copy its profile URL. Submit the URL through the official opt-out page. Each listing has a unique URL and must be submitted separately. Spokeo states that removal does not remove information from its original sources and that listings may reappear.",
+    "source_url": "https://www.spokeo.com/optout",
+    "verified_at": "2026-10-22"
+  }
+]

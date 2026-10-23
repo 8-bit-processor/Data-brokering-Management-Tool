@@ -1,0 +1,70 @@
+[
+  {
+    "source_id": "california_data_broker_registry",
+    "name": "California Data Broker Registry",
+    "source_type": "registry",
+    "jurisdictions": [
+      "United States: California"
+    ],
+    "sectors": [
+      "Commercial personal-data brokerage, including sensitive-data categories"
+    ],
+    "source_url": "https://cppa.ca.gov/data_broker_registry/",
+    "download_url": "https://cppa.ca.gov/data_broker_registry/registry.csv",
+    "checked_at": "2026-10-23",
+    "what_it_covers": "The California Privacy Protection Agency says this registry includes businesses that operated as data brokers in 2025 and submitted annual registration information.",
+    "limitations": "California reporting is not a worldwide or universal census. Registration is not agency endorsement, and absence from a registry does not establish nonexistence, compliance, or misconduct.",
+    "app_handling": "After explicit approval, the app can download this CSV and retain only broker names, DBAs, and the registrants' public website fields. It does not retain contact details or sensitive-practice disclosures, and does not independently verify entries."
+  },
+  {
+    "source_id": "california_drop",
+    "name": "California Delete Request and Opt-out Platform (DROP)",
+    "source_type": "multi_broker_portal",
+    "jurisdictions": [
+      "United States: California"
+    ],
+    "sectors": [
+      "Active data brokers participating in California DROP"
+    ],
+    "source_url": "https://privacy.ca.gov/drop/",
+    "download_url": "",
+    "checked_at": "2026-10-23",
+    "what_it_covers": "California's official information says eligible residents can submit a deletion request covering active data brokers in DROP; the state describes broker response statuses and processing timelines.",
+    "limitations": "This is a California resident portal, not an all-jurisdiction broker directory. Exempt and publicly available information may remain, and the portal may report pending, opted-out, exempted, deleted, or record-not-found outcomes.",
+    "app_handling": "Users access and operate DROP directly. The app does not collect DROP identity details, submit requests, or independently verify portal outcomes."
+  },
+  {
+    "source_id": "oregon_data_broker_registry",
+    "name": "Oregon Data Broker Registry information",
+    "source_type": "registry_guidance",
+    "jurisdictions": [
+      "United States: Oregon"
+    ],
+    "sectors": [
+      "Commercial sales or licensing of covered brokered personal data"
+    ],
+    "source_url": "https://dfr.oregon.gov/business/licensing/data-broker-registry/Pages/index.aspx",
+    "download_url": "",
+    "checked_at": "2026-10-23",
+    "what_it_covers": "Oregon's Division of Financial Regulation explains the state registration requirement and the covered categories of brokered personal data.",
+    "limitations": "The reviewed page is registration guidance, not an imported or complete roster of businesses. Oregon's statutory scope does not define all data brokers worldwide.",
+    "app_handling": "The app links to the official guidance only; it does not crawl filings or infer a company's registration or legal compliance."
+  },
+  {
+    "source_id": "texas_data_broker_registry",
+    "name": "Texas Secretary of State Data Broker Registry guidance",
+    "source_type": "registry_guidance",
+    "jurisdictions": [
+      "United States: Texas"
+    ],
+    "sectors": [
+      "Businesses within the Texas statutory data-broker definition"
+    ],
+    "source_url": "https://www.sos.texas.gov/statdoc/faqs4000.shtml",
+    "download_url": "",
+    "checked_at": "2026-10-23",
+    "what_it_covers": "The Texas Secretary of State FAQ describes the registration requirement, links to its registry search, and explains information available for registered brokers.",
+    "limitations": "The registry applies to Texas law and its statutory definition. The Secretary of State says registration is not agency approval or endorsement; an unregistered search result alone does not prove a violation.",
+    "app_handling": "The app links to official guidance; users must review the registry themselves. The app does not query the search portal or make legal-compliance findings."
+  }
+]

@@ -1,0 +1,267 @@
+MODULE TODO: BROKER COMPLIANCE, DISCOVERY, AND OPT-OUT PREPARATION
+
+Purpose
+-------
+Help a user understand and carry out supported opt-out steps for commercial
+data brokers across sectors and jurisdictions, and assess documented broker
+behavior against the user's request. The scope is global, but the sources and
+broker coverage are incomplete and must always be described that way. The
+current local desktop app includes a small actionable directory, a separate
+inventory of four official U.S. discovery/opt-out sources, and a user-approved
+import of California registry candidates. The import retains only business
+names, DBAs, and registrant-listed websites; it does not promote candidates to
+verified opt-out records. Oregon and Texas rosters and international sources
+are not imported. The app also has an official-page monitor, checklists,
+limited visible browser assistance for Whitepages and Spokeo, and metadata-only
+case tracking. The desktop now opens to a read-only local concierge chat with
+access to the verified broker directory, reviewed source inventory, and
+optional local California candidate snapshot. The chat can also search fixed,
+generic broker-research topics through Tavily after per-query approval, perform
+limited user-directed Whitepages and Spokeo actions, and hand off focused
+impact questions to the independent data-mishandling expert. It does not search
+for an individual's footprint or coordinate every feature module. This is not
+a general-purpose personal-data search engine or legal service.
+The concierge remains visible beside all app tabs. A user can request bounded
+visible text from a selected public source for an initial summary and follow-up
+discussion; page text remains in memory and is included only in local Ollama
+prompts until cleared or the app exits. This is not an embedded browser or
+general crawler.
+Each chat message also includes bounded relevant visible content from the
+selected in-app tab automatically, without another permission prompt. Listing
+and contact form fields and imported evidence contents are excluded; local
+case metadata may be included when its tab is active.
+
+Plain-English algorithm
+-----------------------
+1. Maintain broker records only after checking the broker's current official
+   public opt-out information.
+2. For each record, retain its stable broker name and identifier, covered
+   region, public opt-out method, concise instructions, official source URL,
+   and last-checked date.
+3. Validate the records before showing or using them. Reject incomplete
+   entries, duplicate identifiers, invalid verification dates, non-HTTPS
+   source URLs, and missing required guidance.
+4. Ask the user for a region, not a name, email address, or other personal
+   identifier, when looking up the local directory.
+5. In the CLI, search the maintained directory directly; do not send the
+   region to a model. If the module's ReAct agent is invoked separately, keep
+   it on local Ollama and validate its requested tool and region.
+6. Let application code search the maintained directory and return matching
+   public records. Do not accept broker names, URLs, or instructions invented
+   by the model.
+7. Show each match's source and verification date. Explain when there are no
+   verified records for the region, and state that no match means only "not
+   found in the sources checked"—not that all brokers have been identified,
+   that the user is unaffected, or that any broker is compliant.
+8. In the current CLI, offer local checklists and browser assistance for the
+   maintained Whitepages and Spokeo entries. Use a fresh visible browser,
+   validate the user-provided listing URL against the selected official host,
+   and never save the URL or contact email. For Spokeo, fill only the reviewed
+   URL and email fields; require the user to solve CAPTCHA before submission
+   and complete the email-confirmation link. For Whitepages, enter the URL and
+   advance only the reviewed first step; leave its remaining wizard and
+   telephone verification to the user. Clearly distinguish submission
+   initiation from acknowledgment or verified removal.
+9. In future work, let the user state the desired outcome once. The concierge
+   should select this module's tools, determine the official process, gather
+   only the required user information, and perform supported steps on the
+   user's behalf.
+10. Treat a clear instruction to perform an opt-out with a named broker as
+    task-level authorization to send only ordinary minimum information
+    required by that broker's official process. Tell the user the destination
+    and fields without asking for redundant per-step confirmation. Pause and
+    ask before sending unusually sensitive, disproportionate, or unclear
+    information, including government identifiers, passwords, or financial
+    account data. Keep personal details out of Ollama prompts and public
+    research.
+11. Pause for user-only steps such as CAPTCHA, phone verification, identity
+    checks, or required additional consent. Automate only actions permitted by
+    the broker's process; never bypass anti-automation, identity, or access
+    controls.
+12. Keep distinct statuses for request prepared, submitted, broker
+    acknowledged, broker responded, and outcome verified. Distinguish
+    user-reported events from source evidence and agent inference. Do not
+    equate procedural differences with a legal violation.
+13. To check an official source, show the exact directory-listed URL and get
+    the user's approval before fetching it. Store a bounded local text
+    snapshot and hash, and report the comparison with the previous approved
+    fetch. Treat page content as untrusted and changes as leads, not verified
+    policy changes.
+14. Let the user write a proposed directory update after reviewing the source.
+    Keep it separate from trusted records until the user explicitly approves
+    applying it. Preserve a local report of checks and approved changes.
+15. Keep an explicit public-source inventory with source type, jurisdiction,
+    sector coverage, last page-check date, source limitations, and how the app
+    uses it. Do not treat a source reference as an imported roster or a broker
+    record. Separate leads, reviewed entities, verified opt-out instructions,
+    and supported automation.
+
+Current state and local setup
+-----------------------------
+- The Python prototype uses the standard library except for the optional
+  Playwright browser-assistance dependency. It talks to Ollama only at
+  `127.0.0.1:11434`.
+- `agent.py` configures this module's own ReAct agents using the reusable
+  `react_framework` package. Its instructions, directory lookup, and
+  official-page fetch tool belong to this module; the shared framework does
+  not coordinate other modules.
+- Tool schemas are registered in `react_framework/tool_catalog.py`; each
+  broker agent binds only the tools needed for its task. Other registered
+  tools are not sent to that agent unless explicitly selected.
+- The shared framework owns local Ollama communication and the bounded
+  tool-call loop. This module owns the directory tool and interprets its
+  returned matches.
+- The maintained `broker_directory.json` currently includes Whitepages and
+  Spokeo U.S. listing-removal instructions checked against official sources on
+  2026-10-22. These are listing opt-out procedures, not proof that a broker
+  holds a user's data. Request-message drafting is not implemented; the current
+  entries describe the brokers' online-form processes.
+- The desktop's Coverage and sources tab reads
+  `broker_discovery_sources.json`, a separate inventory of reviewed California
+  registry and DROP sources, Oregon registry guidance, and Texas registry
+  guidance checked on 2026-10-23. Clicking **Refresh California registry**
+  downloads California's official CSV and stores only candidate names, DBAs,
+  and registrant-listed websites in an unencrypted local snapshot. The source
+  receives normal connection metadata; the app sends no personal information.
+  No contact
+  fields or sensitive-practice disclosures are retained. Candidates are not
+  actionable opt-out records; Oregon and Texas rosters and international
+  sources are not imported. No global broker census exists in the app.
+- The Coverage and sources tab now also lets users manage a separate local
+  source list, with source format, coverage, limitations, and an explicit
+  confirmation that they reviewed its terms. Adding or editing a source does
+  not fetch it. General user-managed source refresh and parsing remain future
+  work.
+- The directory file is maintained by a human: recheck official pages before
+  editing a record, record the review date, and keep claims tied to the
+  source. Automatic re-verification and a stale-record policy are not
+  implemented.
+- Future discovery UI: add a user-triggered **Search and update broker list**
+  action using the implemented user-managed GUI source list. Explain source
+  coverage, limitations, and retrieval behavior.
+  Preserve the concierge facade: routine bounded fetching and comparison
+  should not become a sequence of unnecessary technical prompts; show a clear
+  plain-language summary and proposed changes, and require user authorization
+  before changing the trusted directory. Promote a record only when evidence
+  supports both broker activity and a current official opt-out process; retain
+  source URLs and last-checked dates, deduplicate records, and disclose skipped
+  or ambiguous candidates. Search results or registry entries alone are not
+  sufficient evidence. This workflow is not implemented.
+- The read-only `fetch_official_broker_page` tool is registered in the
+  framework catalog and bound by this module only to listed official URLs.
+  The CLI requires approval for each fetch, stores bounded snapshots and
+  comparison history locally without encryption, and offers a separate
+  human-reviewed proposal workflow. The agent tool cannot edit the directory.
+- Approved edits are stored as user-local overrides of
+  `broker_directory.json`; the shipped seed file is left unchanged. The local
+  monitor state and pending proposals are also stored under application data.
+  There is no scheduled monitoring. The desktop's Tavily search is limited to
+  fixed, generic broker topics and requires approval of each exact query.
+- The desktop application is the default entry point; pass `--cli` to run the
+  command-line interface. It explains broker instructions, launches supported
+  browser workflows, and exposes case status/evidence tracking.
+- Case metadata is stored in `opt_out_cases.json` without encryption. It
+  includes broker identity, generated case ID, status history, timestamps,
+  follow-up date, evidence category, and SHA-256 evidence fingerprints; it
+  excludes user listing URLs, email addresses, evidence filenames, and file
+  contents. Due reminders are surfaced when the app launches.
+  Evidence files remain under the user's control and are only read locally to
+  compute a fingerprint.
+- The CLI searches the local directory directly and does not require Ollama
+  for lookup or browser-assisted form interaction. The desktop's ReAct
+  concierge can also use the approved public-search, case-status, supported
+  broker-action, evidence-review, and specialist-handoff tools described above.
+- Browser-assisted form handling is limited to Whitepages and Spokeo. A fresh
+  visible Chromium context opens only the maintained official opt-out URL.
+  Profile URLs are checked against the same broker host. The browser helper
+  fills Spokeo's reviewed listing URL and email fields, then waits for the
+  user to complete CAPTCHA before initiating submission. It leaves email
+  confirmation to the user. For Whitepages it fills the listing URL and
+  advances the first page only; later steps and telephone verification remain
+  manual. URLs, email, browser state, and page text are not persisted or sent
+  to the ReAct agent. No submission status or deletion result is independently
+  verified.
+- The case tracker distinguishes browser-workflow status from user-reported
+  acknowledgment, response, or removal. It does not independently contact the
+  broker or verify deletion. The user can add a category and hash fingerprint
+  for an evidence file without copying its content into the app.
+- `create_monitor_agent` is currently a read-only official-page monitor. It
+  detects public-page changes; it cannot submit an opt-out or determine
+  whether a broker complied with an individual request.
+- Saved preparation checklists are stored locally in the user's application
+  data directory as JSON. They contain public broker instructions only, are
+  not encrypted, and can be viewed or deleted through the CLI.
+- Ollama model installation requires an internet connection; inference from
+  this application is intended to remain local.
+- The current CLI and setup instructions are in the main README and the
+  `ollama_databroker_compliance_agent` Python package.
+
+Research, privacy, and legal boundaries
+----------------------------------------
+- Use public broker information. Do not put identifying information into
+  model prompts or public research queries.
+- Do not break laws or bypass access restrictions to find or remove data.
+- Treat source-page content as untrusted input, even if it is public.
+- A broker record documents a source and process; it does not establish that a
+  broker holds the user's data or has violated a law.
+- Public listings and the maintained directory are incomplete by nature.
+  Opaque or unlisted brokers should receive additional lawful scrutiny as a
+  risk-management priority. Do not assert that unlisted brokers are more
+  likely to commit misconduct unless credible comparative evidence supports
+  that claim; absence from a registry alone proves neither misconduct nor
+  compliance.
+- The DuckDuckGo Personal Information Removal description previously shared
+  is an example of publicly available information, not a requested
+  integration or endorsed source.
+- Directory lookup and checklist preparation use only public directory data.
+  The opt-out assistant separately accepts the user-selected listing URL and,
+  for Spokeo, a contact email for entry into that broker's official form.
+  These details are not sent to the model or saved by the application.
+- User-authorized broker submissions are separate from public research. The
+  current visible CLI workflow takes a selected broker and listing URL; its
+  Spokeo path also takes a contact email. It sends those fields only through
+  that broker's official form and does not send them to the model or search
+  providers. Future tools should likewise send only minimum ordinary
+  information to the named broker, and pause if unusually sensitive,
+  excessive, or unclear information is requested.
+- A published-process review is not a finding of legal compliance. A
+  case-specific compliance assessment requires a user-request record and
+  evidence of submission, broker response, and outcome; present facts and
+  uncertainty for professional review rather than declaring a legal result.
+- The intended concierge should minimize user effort: the user states the
+  desired outcome, and the agent handles supported research and actions,
+  asking only for missing details or required human verification. A
+  broker-specific request must still have clear user authorization before
+  personal information is disclosed to that broker.
+- Local processing is a privacy choice, not a claim of complete legal or
+  privacy compliance. Local file protection and production encryption remain
+  future work.
+
+Questions to resolve before expanding this module
+-------------------------------------------------
+- Which public discovery sources and jurisdictions should be added next, and
+  what source formats and terms permit reliable importing?
+- How often must a broker source be checked again before its listing is
+  considered current?
+- Who can add or correct a listing, and what review is required?
+- Which official broker destinations and supported form actions should the
+  concierge automate first?
+- How should the app classify sensitive, excessive, or unclear broker data
+  requests and obtain the user's decision?
+- How should user verification steps, broker replies, and outcome evidence be
+  recorded and distinguished?
+- How should user-directed broker searches work without sending identifiers
+  to search providers or unapproved sites?
+
+Not included yet
+----------------
+- The current implementation does not automatically search for a user's
+  listings, complete the Whitepages wizard, handle CAPTCHA or telephone/email
+  verification, track broker responses, or verify deletion. The ReAct agent
+  cannot submit requests. Expanding automation requires broker-specific tools
+  and explicit user control.
+- The concierge now has a narrowly scoped handoff to the case-analysis expert.
+  It passes only the current user request for general education. Case evidence
+  is exposed only for an explicit review request, a selected case, and separate
+  user approval. Do not broaden this handoff or share data with other modules
+  without separately specifying its purpose, scope, and approval behavior.

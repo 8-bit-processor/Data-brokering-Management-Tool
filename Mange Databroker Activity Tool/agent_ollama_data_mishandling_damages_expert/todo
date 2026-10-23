@@ -1,0 +1,198 @@
+MODULE TODO: EVIDENCE, IMPACT ANALYSIS, AND ATTORNEY PREPARATION
+
+Purpose
+-------
+Help an ordinary citizen understand data-mishandling risks, reach evidence-led
+conclusions about documented and potential impacts, and prepare material for a
+professional attorney to review. This module is owned by its specialist agent
+configuration and is exposed through both concierge handoff and a direct,
+case-scoped action from the desktop timeline. The concierge invokes it without
+chat history; case evidence is available only after separate user approval.
+
+Agent foundation
+----------------
+This module has its own agent configuration in `agent.py` and imports the
+shared `react_framework` execution engine. It binds only the case-file and
+local specialist tools it needs. Generic case-file operations are shared
+infrastructure, while impact-analysis policy stays in this module. The
+research specialist currently prepares plans only because no public-search
+provider is configured for legal research.
+
+The shared framework is limited to local Ollama communication and bounded
+tool execution. This module decides what its own tools may do and how their
+results are interpreted. The desktop concierge can delegate relevant
+user-requested questions to this specialist, but does not reproduce its
+conclusions or grant case evidence access without separate approval.
+From My requests > Case timeline, the user can also submit a focused question
+directly to the specialist. The UI requires separate evidence-review approval,
+shows activity while the local analysis runs, and displays the conclusion in a
+separate result window. The conclusion is not automatically saved or added to
+the attorney-review draft.
+
+Evidence tools are restricted to an app-managed case workspace:
+- Originals are explicitly imported as copies under `originals/`.
+- Agent tools can read and search originals but cannot modify, rename, or
+  delete them.
+- Copies and generated notes are create-new files under `derived/`; existing
+  files are never overwritten.
+- UTF-8 text search returns exact quotations with path, line number, and
+  SHA-256 citation. It reports unsupported, oversized, or invalid-text files
+  that it skipped. PDF extraction and scanned-image OCR are not configured.
+- Agent actions are shown live and recorded as content-free metadata in the
+  case's local `activity.jsonl`.
+
+The research specialist receives only a non-identifying query, not case files.
+The legal issue-spotting specialist may receive case context locally. It has
+no verified legal source library and must not claim legal research.
+When an impact specialist is given a case workspace, it can also read the
+module-owned, user-reported timeline. The desktop's My requests tab provides
+the timeline editor; events are stored as unencrypted JSON beside that case's
+originals and derived files. A linked evidence item can include a user-entered
+description, source, created/received date, sender, recipient, and relation to
+the event. Corrections are appended as new events linked to the event they
+correct; earlier records remain unchanged.
+
+Implemented and wired into the desktop
+--------------------------------------
+- From **My requests > Case timeline**, import an original, record dated or
+  undated user-reported events, link imported files, add provenance context,
+  and append corrections without changing earlier entries.
+- Ask the case-scoped privacy impact analysis specialist a focused question
+  from that timeline.
+  The app asks separately before allowing local Ollama to inspect the case
+  workspace, displays activity, and presents the conclusion in a separate
+  window. It does not automatically persist the model's conclusion.
+- Preview an attorney-preparation Markdown draft containing the chronology,
+  up to 100 original-file metadata entries, questions for counsel, and scope
+  limits; require confirmation before saving a new local derived file.
+
+Not yet implemented
+-------------------
+- OCR/PDF extraction, verified legal research, jurisdiction-specific law
+  applicability, monetary damages valuation, and an attorney packet containing
+  agent conclusions or researched sources.
+- Encryption and complete workspace retention/deletion controls.
+
+Plain-English algorithm
+-----------------------
+1. Start a case file that is stored locally by the application during
+   development. Do not put case data in a browser or cloud service.
+2. Let the user add evidence, including dated screenshots, broker notices and
+   letters, copies of letters the user wrote, proof of sending or receipt,
+   PDFs, scanned images, records about consent or agreements, and the user's
+   account of effects they experienced. The timeline dialog can copy a
+   user-selected file of any type into the case's originals folder; importing
+   does not itself send file contents to Ollama. Only supported UTF-8 text is
+   currently reviewable by the local agent. An impact report can be recorded
+   as a user-reported timeline event.
+3. Keep imported originals distinct. The timeline accepts a user-written
+   event description and optional link to an already imported original.
+   Evidence links can carry user-entered context for what the item is, how it
+   was obtained, its created/received date, sender, recipient, and relationship
+   to the event. These descriptions are reports, not verified provenance.
+4. Do not silently alter original files. If a future feature extracts text
+   from a PDF or image, store the extracted text as a separate derivative and
+   label it as machine-produced. Let the user compare uncertain text with the
+   original.
+5. Build a timeline using dates visible in evidence and dates entered by the
+   user. The current timeline editor records notice, delivery, broker-response,
+   later-observation, reported-impact, correction, and other events. It labels
+   each entry user-reported, records whether its date is evidence-linked,
+   user-reported, estimated, or unknown, and sorts undated events last. A
+   linked original is identified by case-relative path and SHA-256; that
+   fingerprint does not establish authenticity or prove the event. Never
+   invent a missing date or silently replace an earlier report with a
+   correction.
+6. When the user requests analysis, the desktop can invoke the independent
+   impact specialist directly from the case timeline. It requests explicit
+   approval before exposing the selected case's workspace, including
+   supported text originals and the user-reported timeline, to local Ollama.
+   The result appears separately from the evidence and is labeled as
+   preliminary specialist analysis, not fact or a legal ruling. It is not
+   automatically saved.
+7. If research is requested, search publicly accessible sources only and use
+   non-identifying queries. Never include names, email addresses, addresses,
+   case-specific personal details, or other identifiers in a public search.
+   Do not break laws or bypass access restrictions.
+8. Identify the relevant jurisdiction from reliable information when
+   possible. Research the broker's jurisdiction if the broker's location can
+   be established, and separately note any potentially relevant user
+   jurisdiction. If jurisdiction is uncertain, say so.
+9. Support legal and factual statements with inspectable public sources.
+   Record source title, publisher, URL, access date, relevant passage, and the
+   agent's explanation of how it relates to the evidence.
+10. Analyze impacts using recorded facts and the user's own account. The user
+    can request this directly from the case timeline. The specialist starts
+    with its strongest supported bottom line and identifies supporting
+    evidence, confidence, missing evidence, uncertainty, and plausible
+    alternatives. Do not turn suspicion into fact or promise a legal result.
+11. Help prepare an attorney-review set containing a factual chronology,
+    evidence index, relevant source material, preliminary analysis, and
+    questions for counsel. The current previewable local draft includes the
+    chronology, imported-file metadata/hash index, user-provided questions,
+    and limitations, but not evidence contents, legal research, or agent
+    conclusions. Mark any future agent analysis as preliminary so an attorney
+    can review and correct it.
+12. Before any future export or sharing, show the user what will be included
+    and require the user's deliberate choice. The current flow previews the
+    exact draft and requires explicit approval before saving a new Markdown
+    file under the local case's `derived/` directory. It does not share or
+    transmit the file.
+
+Research and privacy rules
+--------------------------
+- Use the local Ollama model as the intended model runtime.
+- Online research may use only publicly accessible information.
+- Never use personal identifiers in research queries.
+- Preserve original evidence separately from OCR, summaries, research notes,
+  and agent-generated reasoning.
+- Do not assume that a jurisdiction with stronger privacy rules governs the
+  user. Ask for the relevant location when needed, distinguish the user's
+  location from the broker's location, and explain that legal applicability
+  depends on facts and law that may not yet be verified. A highly protective
+  jurisdiction may be used as a clearly labeled comparison, not as a claim of
+  the user's rights. If local protections have not been established, state
+  that limitation and offer to help prepare a neutral educational summary or
+  questions for local lawmakers. Do not contact lawmakers.
+- Local storage is the development direction. Production encryption,
+  retention, backup, export, and deletion requirements remain to be clarified.
+- The expert should draw and clearly state factual and impact conclusions
+  supported by available evidence, including when the most defensible
+  conclusion is that evidence is insufficient. Its work must remain traceable
+  to evidence and sources and suitable for professional attorney review.
+- Do not describe an agent assessment as a proven violation, guaranteed
+  outcome, or established damages amount without adequate evidence and
+  professional review.
+
+Open questions for later
+------------------------
+- Which jurisdictions and authoritative legal sources should be researched
+  first? Do not silently apply a single "most regulated" jurisdiction to
+  users elsewhere.
+- Which public legal sources count as authoritative for each jurisdiction?
+- What minimum case-file records should be required?
+- Which image/PDF formats and extraction steps should be supported first?
+- What should remain in the local case file, and what should be included in an
+  attorney-review export?
+- Is estimating monetary damages in scope, or should early analysis focus on
+  documenting impacts and evidence without estimating a value?
+- What local retention, backup, deletion, and production-encryption
+  expectations should apply?
+- What should the user be told about a local legal-protection gap, and what
+  user-reviewed educational material for local lawmakers would be useful?
+
+Not included yet
+----------------
+- Case storage, supported text review, user-reported timeline editing,
+  concierge delegation, and direct case-timeline-to-expert analysis exist.
+  Expert conclusions are displayed separately and are not automatically
+  persisted. The timeline includes append-only correction events and
+  structured user-reported context for linked evidence; its attorney-review
+  draft can be previewed and saved only after confirmation.
+- OCR, live legal research, monetary damages valuation, and a complete
+  attorney packet are not implemented. The current local draft is a limited
+  user-reviewed preparation document, not a complete export.
+- Do not give this specialist authority to contact brokers or search for an
+  individual's footprint.
+- The DuckDuckGo material previously shared is an example of public
+  information, not a requested integration or endorsed source.
