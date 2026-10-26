@@ -466,10 +466,3 @@ of policy, tools, and domain conclusions. Any additional case-data sharing,
 combined workflows, or agent orchestration requires explicit handoff and
 approval design before implementation.
 
-## Before public release
-
-- Confirm that the person publishing the project has authority to license its
-  contents; review ownership if contributions are shared or unclear.
-- Review the included files and Git ignore rules to ensure no private case data,
-  credentials, or machine-specific files are published.
-- Recheck the documented capabilities and limitations against the code.
